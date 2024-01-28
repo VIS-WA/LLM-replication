@@ -3,8 +3,9 @@
 This repo contains the scripts to run the LLM model on a device. Currently this repo supports only Linux-based OS.
 
 ## Files Description
-1. `model.sh`: Script to download an LLM model's weights. List of available models [here](models_list.csv)
-2. `setup.sh`: Script to install [`llama.cpp`](https://github.com/ggerganov/llama.cpp). This is used to run the above downloaded models.
+1. `models_list.csv`: This file contains the list of available models that can be downloaded from the `model.sh` script. Update this with other models.
+2. `model.sh`: Script to download an LLM model's weights. List of available models [here](models_list.csv).
+3. `setup.sh`: Script to install [`llama.cpp`](https://github.com/ggerganov/llama.cpp). This is used to run the above downloaded models.
 
 ## Execution Steps:
 1. Clone this repo 
