@@ -1,6 +1,6 @@
 # LLM-replication
 
-This repo contains the scripts to run the LLM model on a device. Currently this repo supports only Linux-based OS.
+This repo contains the scripts to run the LLM model on a device. Currently this repo supports only Linux-based OS and is being used for internal puporses only.
 
 ## Files Description
 1. `models_list.csv`: This file contains the list of available models that can be downloaded from the `model.sh` script. Update this with other models.
