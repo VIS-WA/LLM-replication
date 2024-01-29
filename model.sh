@@ -4,11 +4,10 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # download a text file using curl without any output
-curl -s -o $DIR/models_list.txt https://raw.githubusercontent.com/VIS-WA/LLM-replication/main/models_list.csv
-# curl -L https://raw.githubusercontent.com/VIS-WA/LLM-replication/main/models_list.csv -o models_list.txt
+# curl -s -o $DIR/models_list.txt https://raw.githubusercontent.com/VIS-WA/LLM-replication/main/models_list.csv
 
 # print the first two columns of the text file with a separation of 2 tabs
-awk -F, '{print "\n" $1 "\t" $2}' models_list.txt
+awk -F, '{print "\n" $1 "\t" $2}' models_list.csv
 
 # user input for a number
 echo -e "\n"
