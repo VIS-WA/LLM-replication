@@ -17,9 +17,9 @@ read model_no
 
 #add 1 to the user input
 model_no=$((model_no+1))
-model_name=$(awk -F, -v var="$model_no" 'NR==var {print $2}' models_list.txt)
+model_name=$(awk -F, -v var="$model_no" 'NR==var {print $2}' models_list.csv)
 # fetch the url of the model corresponding to the S.No in column 3
-model_url=$(awk -F, -v var="$model_no" 'NR==var {print $3}' models_list.txt)
+model_url=$(awk -F, -v var="$model_no" 'NR==var {print $3}' models_list.csv)
 
 
 # print message that name of the model being downloaded
