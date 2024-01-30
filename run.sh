@@ -41,9 +41,11 @@ if [ $? -eq 1 ]; then
     exit 1
 fi
 
+# create benchmark folder if it does not exist:
+mkdir -p benchmarks
 
 echo ""
-echo "Benchmark results saved in benchmarks.txt"
+echo "Benchmark results saved in benchmarks"
 
 #===================================================================================================
 # refine the log file to extract the timings
@@ -76,10 +78,9 @@ done
 # Append the remaining lines (after 'Log end') to the temporary file
 #sed -n '/Log end/,$p' "$log_file" >> "$temp_file"
 
-# create benchmark folder if it does not exist:
-mkdir -p benchmarks
-# print the first 2 words delimited by space from model name variable 
-model_name=$(echo $model_name | awk '{print $1" "$2}')
+
+# print the first 3 words delimited by space from model name variable 
+model_name=$(echo $model_name | awk '{print $1" "$2" "$3}')
 # Replace the original log file with the temporary file
 mv "$temp_file" "benchmarks/$model_name.txt"
 
@@ -88,6 +89,6 @@ if [ $? -eq 1 ]; then
     echo "benchmarking error, exiting..."
     exit 1
 fi
-echo "Timings extracted and log file updated."
+echo "Timings extracted and benchmarks file updated in Benchmarks folder."
 
 
