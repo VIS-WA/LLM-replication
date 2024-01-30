@@ -3,9 +3,6 @@
 # get the current directory
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# download a text file using curl without any output
-# curl -s -o $DIR/models_list.txt https://raw.githubusercontent.com/VIS-WA/LLM-replication/main/models_list.csv
-
 # print the first two columns of the text file with a separation of 2 tabs
 awk -F, '{print "\n" $1 "\t" $2}' models_list.csv
 
@@ -28,4 +25,4 @@ echo "Downloading $model_name..."
 # echo "$DIR/$model_name.gguf"
 mkdir models/
 # download the model
-curl -L -o "$DIR/models/$model_name.gguf" $model_url
+curl -L --create-dirs -O --output-dir "$DIR/models/" $model_url
