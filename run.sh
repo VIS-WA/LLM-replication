@@ -32,7 +32,13 @@ echo "Selected model: $model_name"
 echo "Path to model: $model_dir/$model_name"
 
 echo "Executing $model_name with $(nproc --all) thread(s)"
-./llama-cpp/main -t $(nproc --all) -n 16  -m "$model_dir/$model_name" --color -c 2048 --temp 0.5 -p "Building a website can be done in 10 simple steps:\nStep 1:" 2> benchmarks.txt 
+./llama.cpp/main -t $(nproc --all) -n 16  -m "$model_dir/$model_name" --color -c 2048 --temp 0.5 -p "Building a website can be done in 10 simple steps:\nStep 1:" 2> benchmarks.txt 
+
+# if the model is not found, print error message and exit
+if [ $? -eq 1 ]; then
+    echo "Something went wrong, please check the model path and try again"
+    exit 1
+fi
 
 echo "Benchmark results saved in benchmarks.txt"
 
