@@ -76,8 +76,12 @@ done
 # Append the remaining lines (after 'Log end') to the temporary file
 #sed -n '/Log end/,$p' "$log_file" >> "$temp_file"
 
+# create benchmark folder if it does not exist:
+mkdir -p benchmarks
+# print the first 2 words delimited by space from model name variable 
+model_name=$(echo $model_name | awk '{print $1" "$2}')
 # Replace the original log file with the temporary file
-mv "$temp_file" "$log_file"
+mv "$temp_file" "benchmarks/$model_name.txt"
 
 # if any error occurs, print error message and exit
 if [ $? -eq 1 ]; then
