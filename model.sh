@@ -26,5 +26,6 @@ model_url=$(awk -F, -v var="$model_no" 'NR==var {print $3}' models_list.csv)
 echo "Downloading $model_name..."
 # echo $model_url
 # echo "$DIR/$model_name.gguf"
+mkdir models/
 # download the model
-curl -L -o "$DIR/$model_name.gguf" $model_url
+curl -L -o "$DIR/models/$model_name.gguf" $model_url
