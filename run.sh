@@ -33,19 +33,50 @@ echo "Path to model: $model_dir/$model_name"
 
 #===================================================================================================
 echo "Executing $model_name with $(nproc --all) thread(s)"
-./llama.cpp/main -t $(nproc --all) -n 16  -m "$model_dir/$model_name" --color -c 2048 --temp 0.5 -p "Building a website can be done in 10 simple steps:\nStep 1:" 2> benchmarks.txt 
+
+# store the initial free memory
+initial_free_memory=$(free -m | awk '/^Mem/ {printf "%d\n", $7}')
+echo "Initial free memory: $initial_free_memory MB"
+
+# store maximum memory used by the model
+max_memory_used=$initial_free_memory
+
+# run free command in background to get the free memory every 0.1 seconds and just store the maximum value in max_memory_used
+while true; do
+    free_memory=$(free -m | awk '/^Mem/ {printf "%d\n", $7}')
+    # echo "Free memory: $free_memory MB, Max memory used: $max_memory_used MB"
+    if [ $max_memory_used -gt $free_memory ]; then
+        max_memory_used=$free_memory
+    fi
+    # write the maximum memory used by the model to a file
+    echo "$max_memory_used" > max_memory_used.txt
+    sleep 0.1
+done &
+
+
+./llama.cpp/main -t $(nproc --all) --no-mmap -n 16  -m "$model_dir/$model_name" --color -c 2048 --temp 0.5 -p "Building a website can be done in 10 simple steps:\nStep 1:" 2> benchmarks.txt 
+
+# kill the free command running in background
+kill $!
 
 # if the model is not found, print error message and exit
 if [ $? -eq 1 ]; then
     echo "model execution error, exiting..."
     exit 1
 fi
+# print the maximum memory used by the model which is srored in max_memory_used variable of the background process
+# cat max_memory_used.txt
+max_memory_used=$(cat max_memory_used.txt)
+echo ""
+echo "Maximum memory used: $((initial_free_memory - max_memory_used)) MB"
+
+
 
 # create benchmark folder if it does not exist:
 mkdir -p benchmarks
 
 echo ""
-echo "Benchmark results saved in benchmarks"
+echo "Benchmark results saved in benchmarks.txt file."
 
 #===================================================================================================
 # refine the log file to extract the timings
@@ -83,6 +114,9 @@ done
 model_name=$(echo $model_name | awk '{print $1" "$2" "$3}')
 # Replace the original log file with the temporary file
 mv "$temp_file" "benchmarks/$model_name.txt"
+
+# append the maximum memory used by the model to the benchmarks file
+echo "Maximum memory used: $((initial_free_memory - max_memory_used)) MB" >> "benchmarks/$model_name.txt"
 
 # if any error occurs, print error message and exit
 if [ $? -eq 1 ]; then
