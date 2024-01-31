@@ -1,0 +1,5 @@
+models/
+llama.cpp/
+benchmarks/
+main.log
+benchmarks.txt

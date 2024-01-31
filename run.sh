@@ -70,7 +70,7 @@ max_memory_used=$(cat max_memory_used.txt)
 echo ""
 echo "Maximum memory used: $((initial_free_memory - max_memory_used)) MB"
 
-
+rm max_memory_used.txt
 
 # create benchmark folder if it does not exist:
 mkdir -p benchmarks
