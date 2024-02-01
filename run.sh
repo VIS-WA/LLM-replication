@@ -36,7 +36,7 @@ echo "Executing $model_name with $(nproc --all) thread(s)"
 
 # store the initial free memory
 initial_free_memory=$(free -m | awk '/^Mem/ {printf "%d\n", $7}')
-# initial_free_memory=$(( $(wmic computersystem get TotalPhysicalMemory | grep -oP '\d+') / 1024 )) # for windows
+# initial_free_memory=$(( $(wmic OS get FreePhysicalMemory | grep -oP '\d+') / 1024 )) # for windows
 echo "Initial free memory: $initial_free_memory MB"
 
 # store maximum memory used by the model
@@ -45,7 +45,7 @@ max_memory_used=$initial_free_memory
 # run free command in background to get the free memory every 0.1 seconds and just store the maximum value in max_memory_used
 while true; do
     free_memory=$(free -m | awk '/^Mem/ {printf "%d\n", $7}') # for linux
-    # free_memory=$(( $(wmic computersystem get TotalPhysicalMemory | grep -oP '\d+') / 1024 )) # for windows
+    # free_memory=$(( $(wmic OS get FreePhysicalMemory | grep -oP '\d+') / 1024 )) # for windows
 
     # echo "Free memory: $free_memory MB, Max memory used: $max_memory_used MB"
     if [ $max_memory_used -gt $free_memory ]; then
