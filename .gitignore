@@ -4,3 +4,6 @@ benchmarks/
 main.log
 benchmarks.txt
 max_memory_used.txt
+benchmarks*
+plots/
+
