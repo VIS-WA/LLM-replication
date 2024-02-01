@@ -37,7 +37,7 @@ for model_name in $(ls $model_dir); do
 
         # store the initial free memory
         initial_free_memory=$(free -m | awk '/^Mem/ {printf "%d\n", $7}') # for linux
-        # initial_free_memory=$(( $(wmic computersystem get TotalPhysicalMemory | grep -oP '\d+') / 1024 / 1024 )) # for windows
+        # initial_free_memory=$(( $(wmic OS get FreePhysicalMemory | grep -oP '\d+') / 1024 )) # for windows
         echo "Initial free memory: $initial_free_memory MB"
 
         # store maximum memory used by the model
@@ -46,7 +46,7 @@ for model_name in $(ls $model_dir); do
         ## Background process to monitor the memory usage
         while true; do
             free_memory=$(free -m | awk '/^Mem/ {printf "%d\n", $7}') # for linux
-            # free_memory=$(( $(wmic computersystem get TotalPhysicalMemory | grep -oP '\d+') / 1024 / 1024 )) # for windows
+            # free_memory=$(( $(wmic OS get FreePhysicalMemory | grep -oP '\d+') / 1024 )) # for windows
 
             # echo "Free memory: $free_memory MB, Max memory used: $max_memory_used MB"
             if [ $max_memory_used -gt $free_memory ]; then
