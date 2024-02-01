@@ -1,0 +1,5 @@
+      sample time =       4.82 ms /    16 runs   (    0.30 ms per token,  3322.95 tokens per second)
+ prompt eval time =    4314.18 ms /    15 tokens (  287.61 ms per token,     3.48 tokens per second)
+        eval time =   34524.47 ms /    15 runs   ( 2301.63 ms per token,     0.43 tokens per second)
+       total time =   38852.39 ms /    30 tokens
+Maximum memory used: 0 MB

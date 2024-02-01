@@ -11,34 +11,10 @@ else
     read model_dir
 fi
 
-
-# # print the models in the directory with serial number and ask user to select one with serial number and save the corresponding model name in model_name variable
-# echo "Please select a model from the list below by entering the serial number"
-# # save the models in the directory in a variable
-# models=$(ls $model_dir)
-# # print the models in the directory with serial number
-# for i in $(seq 1 $(ls $model_dir | wc -l)); do
-#     echo "$i) $(ls $model_dir | sed -n "$i"p)"
-# done
-# # ask user to select one with serial number
-# read model_serial
-
-# # save the corresponding model name in model_name variable 
-# model_name=$(ls $model_dir | sed -n "$model_serial"p)
-
-# echo "Selected model: $model_name"
-# # print path to model
-# echo "Path to model: $model_dir/$model_name"
-
-# # set max_memory_used variable to 1 TB
-# max_memory_used=1048576 # 1 TB -> large value
-
-
-
 # create benchmark folder if it does not exist:
 mkdir -p benchmarks
 # start timer 
-initial_start=$(date +%s.%N)
+# initial_start=$(date +%s.%N)
 
 #===================================================================================================
 # run for all the models in the directory
@@ -60,8 +36,8 @@ for model_name in $(ls $model_dir); do
         echo "Executing $model_name with $(nproc --all) thread(s)"
 
         # store the initial free memory
-        initial_free_memory=$(free -m | awk '/^Mem/ {printf "%d\n", $7}')
-        # initial_free_memory=$(( $(wmic computersystem get TotalPhysicalMemory | grep -oP '\d+') / 1024 )) # for windows
+        initial_free_memory=$(free -m | awk '/^Mem/ {printf "%d\n", $7}') # for linux
+        # initial_free_memory=$(( $(wmic computersystem get TotalPhysicalMemory | grep -oP '\d+') / 1024 / 1024 )) # for windows
         echo "Initial free memory: $initial_free_memory MB"
 
         # store maximum memory used by the model
@@ -70,7 +46,7 @@ for model_name in $(ls $model_dir); do
         ## Background process to monitor the memory usage
         while true; do
             free_memory=$(free -m | awk '/^Mem/ {printf "%d\n", $7}') # for linux
-            # free_memory = $(( $(wmic computersystem get TotalPhysicalMemory | grep -oP '\d+') / 1024 )) # for windows
+            # free_memory=$(( $(wmic computersystem get TotalPhysicalMemory | grep -oP '\d+') / 1024 / 1024 )) # for windows
 
             # echo "Free memory: $free_memory MB, Max memory used: $max_memory_used MB"
             if [ $max_memory_used -gt $free_memory ]; then
@@ -100,7 +76,7 @@ for model_name in $(ls $model_dir); do
         kill $!
 
         # echo ""
-        #===================================================================================================
+        #=========================================================
         # refine the log file to extract the timings
 
         log_file="benchmarks.txt"
@@ -142,8 +118,8 @@ for model_name in $(ls $model_dir); do
         fi
         echo "Timings extracted and benchmarks file updated in Benchmarks folder."
 
-        end=$(date +%s.%N)
-        echo "Time elapsed for this model: $(echo "$end - $start" | bc) seconds"
+        # end=$(date +%s.%N)
+        # echo "Time elapsed for this model: $(echo "$end - $start" | bc) seconds" # only works in linux
 
     done
 done
@@ -151,8 +127,9 @@ done
 # remove the file that stores the maximum memory used by the model
 rm max_memory_used.txt
 # print total time elapsed
-final_end=$(date +%s.%N)
-echo "Total time elapsed: $(echo "$final_end - $initial_start" | bc) seconds"
+# final_end=$(date +%s.%N)
+
+# echo "Total time elapsed: $(echo "$final_end - $initial_start" | bc) seconds" # only works in linux
 
 
 
