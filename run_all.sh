@@ -53,7 +53,7 @@ for model_name in $(ls $model_dir); do
                 max_memory_used=$free_memory
             fi
             # write the maximum memory used by the model to a file
-            echo "$max_memory_used" > max_memory_used.txt
+            echo "$max_memory_used" > memory_used.txt
             sleep 0.1
         done &
 
@@ -67,8 +67,8 @@ for model_name in $(ls $model_dir); do
             exit 1
         fi
         # print the maximum memory used by the model which is srored in max_memory_used variable of the background process
-        # cat max_memory_used.txt
-        max_memory_used=$(cat max_memory_used.txt)
+        # cat memory_used.txt
+        max_memory_used=$(cat memory_used.txt)
         echo ""
         echo "Minimum available memory: $max_memory_used MB"
         echo "Maximum memory used: $((initial_free_memory - max_memory_used)) MB"
@@ -125,7 +125,7 @@ for model_name in $(ls $model_dir); do
 done
 # kill the free command running in background
 # remove the file that stores the maximum memory used by the model
-rm max_memory_used.txt
+rm memory_used.txt
 # print total time elapsed
 # final_end=$(date +%s.%N)
 
