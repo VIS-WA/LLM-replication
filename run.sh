@@ -45,14 +45,14 @@ max_memory_used=$initial_free_memory
 # run free command in background to get the free memory every 0.1 seconds and just store the maximum value in max_memory_used
 while true; do
     free_memory=$(free -m | awk '/^Mem/ {printf "%d\n", $7}') # for linux
-    # free_memory = $(( $(wmic computersystem get TotalPhysicalMemory | grep -oP '\d+') / 1024 )) # for windows
+    # free_memory=$(( $(wmic computersystem get TotalPhysicalMemory | grep -oP '\d+') / 1024 )) # for windows
 
     # echo "Free memory: $free_memory MB, Max memory used: $max_memory_used MB"
     if [ $max_memory_used -gt $free_memory ]; then
         max_memory_used=$free_memory
     fi
     # write the maximum memory used by the model to a file
-    echo "$max_memory_used" > max_memory_used.txt
+    echo "$max_memory_used" > memory_used.txt
     sleep 0.1
 done &
 
@@ -68,12 +68,12 @@ if [ $? -eq 1 ]; then
     exit 1
 fi
 # print the maximum memory used by the model which is srored in max_memory_used variable of the background process
-# cat max_memory_used.txt
-max_memory_used=$(cat max_memory_used.txt)
+# cat memory_used.txt
+max_memory_used=$(cat memory_used.txt)
 echo ""
 echo "Maximum memory used: $((initial_free_memory - max_memory_used)) MB"
 
-rm max_memory_used.txt
+rm memory_used.txt
 
 # create benchmark folder if it does not exist:
 mkdir -p benchmarks
