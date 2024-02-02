@@ -119,9 +119,6 @@ done
 # Append the remaining lines (after 'Log end') to the temporary file
 #sed -n '/Log end/,$p' "$log_file" >> "$temp_file"
 
-
-# print the first 3 words delimited by space from model name variable 
-model_name=$(echo $model_name | awk '{print $1" "$2" "$3}')
 # Replace the original log file with the temporary file
 mv "$temp_file" "benchmarks/$model_name.txt"
 

@@ -7,5 +7,6 @@ plots/
 memory_used.txt
 plotter.py
 benchmark*
+temp*
 
 
