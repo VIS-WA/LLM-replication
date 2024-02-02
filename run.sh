@@ -25,6 +25,10 @@ read model_serial
 # save the corresponding model name in model_name variable 
 model_name=$(ls $model_dir | sed -n "$model_serial"p)
 
+# store the number of threads -2
+num_threads=$(nproc --all)
+num_threads=$((num_threads / 2))
+
 echo "Selected model: $model_name"
 
 
@@ -32,7 +36,7 @@ echo "Selected model: $model_name"
 echo "Path to model: $model_dir/$model_name"
 
 #===================================================================================================
-echo "Executing $model_name with $(nproc --all) thread(s)"
+echo "Executing $model_name with $num_threads thread(s)"
 
 # store the initial free memory
 initial_free_memory=$(free -m | awk '/^Mem/ {printf "%d\n", $7}')
@@ -46,7 +50,10 @@ max_memory_used=$initial_free_memory
 while true; do
     free_memory=$(free -m | awk '/^Mem/ {printf "%d\n", $7}') # for linux
     # free_memory=$(( $(wmic OS get FreePhysicalMemory | grep -oP '\d+') / 1024 )) # for windows
-
+    # if free_memort is not fetched, do not update max_memory_used
+    if [ -z "$free_memory" ]; then
+        continue
+    fi
     # echo "Free memory: $free_memory MB, Max memory used: $max_memory_used MB"
     if [ $max_memory_used -gt $free_memory ]; then
         max_memory_used=$free_memory
@@ -57,7 +64,7 @@ while true; do
 done &
 
 
-./llama.cpp/main -t $(nproc --all) --no-mmap -n 16  -m "$model_dir/$model_name" --color -c 2048 --temp 0.5 -p "Building a website can be done in 10 simple steps:\nStep 1:" 2> benchmarks.txt 
+./llama.cpp/main -t $num_threads --no-mmap -n 16  -m "$model_dir/$model_name" --color -c 2048 --temp 0.5 -p "Building a website can be done in 10 simple steps:\nStep 1:" 2> benchmarks.txt 
 
 # kill the free command running in background
 kill $!

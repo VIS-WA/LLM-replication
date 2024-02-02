@@ -16,7 +16,8 @@ Maximum memory used: 5206 MB
 # For a given model, plot the prompt eval time and the eval time for each run.
 # The x-axis will be the run number, and the y-axis will be the time in ms.
 
-dir = "benchmarks-LP"
+dir = "benchmarks/benchmarks-LP/benchmarks/"
+output_dir = "plots/LP/"
 
 # All the folders present in the benchmarks folder are the models
 models = os.listdir(dir)
@@ -61,11 +62,14 @@ for model in models:
     # Set the legend
     plt.legend()
     # Save the plot
-    plt.savefig("plots/" + model + ".png")
+    plt.savefig(output_dir + model + ".png")
     # Clear the plot
     plt.clf()
 
-
+# stop here
+exit(0)
+#=======================================================================================================================
+    
 # plot the memory usage for each model across all runs
 # The x-axis will be the run, and the y-axis will be the memory usage in MB and plot all the models in the same plot
 # Create the x-axis
@@ -84,6 +88,7 @@ for model in models:
         # Get the memory usage
         # print(lines[4].split()[3])
         memory_usage = float(lines[4].split()[3])
+        # if memory_usage > 20000: 
         # Append to the array
         memory_usages.append(memory_usage)
         # Close the file
@@ -99,7 +104,7 @@ plt.ylabel("Memory usage (MB)")
 # Set the legend
 plt.legend()
 # Save the plot
-plt.savefig("plots/memory_usage.png")
+plt.savefig(output_dir+"memory_usage.png")
 # Clear the plot
 plt.clf()
 

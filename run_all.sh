@@ -10,7 +10,9 @@ else
     echo "Model directory not found, please enter the path to the directory"
     read model_dir
 fi
-
+# store the number of threads -2
+num_threads=$(nproc --all)
+num_threads=$((num_threads / 2))
 # create benchmark folder if it does not exist:
 mkdir -p benchmarks
 # start timer 
@@ -32,8 +34,8 @@ for model_name in $(ls $model_dir); do
         sleep 1
         echo ""
         echo "Iteration $it"
-        pwd
-        echo "Executing $model_name with $(nproc --all) thread(s)"
+        # execute the model with nproc - 2 threads
+        echo "Executing $model_name with $num_threads thread(s)"
 
         # store the initial free memory
         initial_free_memory=$(free -m | awk '/^Mem/ {printf "%d\n", $7}') # for linux
@@ -48,6 +50,11 @@ for model_name in $(ls $model_dir); do
             free_memory=$(free -m | awk '/^Mem/ {printf "%d\n", $7}') # for linux
             # free_memory=$(( $(wmic OS get FreePhysicalMemory | grep -oP '\d+') / 1024 )) # for windows
 
+            # if free_memort is not fetched, do not update max_memory_used
+            if [ -z "$free_memory" ]; then
+                continue
+            fi
+
             # echo "Free memory: $free_memory MB, Max memory used: $max_memory_used MB"
             if [ $max_memory_used -gt $free_memory ]; then
                 max_memory_used=$free_memory
@@ -57,7 +64,7 @@ for model_name in $(ls $model_dir); do
             sleep 0.1
         done &
 
-        ./llama.cpp/main -t $(nproc --all) --no-mmap -n 16  -m "$model_dir/$model_name" --color -c 2048 --temp 0.5 -p "Building a website can be done in 10 simple steps:\nStep 1:" 2> benchmarks.txt 
+        ./llama.cpp/main -t $num_threads --no-mmap -n 16  -m "$model_dir/$model_name" --color -c 2048 --temp 0.5 -p "Building a website can be done in 10 simple steps:\nStep 1:" 2> benchmarks.txt 
 
         # if the model is not found, print error message and exit
         if [ $? -eq 1 ]; then
@@ -124,12 +131,12 @@ for model_name in $(ls $model_dir); do
     done
 done
 # kill the free command running in background
+
+# when ctrl + c is pressed, kill the background process and run_all.sh script
+trap "kill 0; exit" SIGINT
+
 # remove the file that stores the maximum memory used by the model
 rm memory_used.txt
-# print total time elapsed
-# final_end=$(date +%s.%N)
-
-# echo "Total time elapsed: $(echo "$final_end - $initial_start" | bc) seconds" # only works in linux
 
 
 
