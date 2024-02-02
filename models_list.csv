@@ -3,3 +3,4 @@ S.No,Model Name,Link
 2,Microsoft Phi2 2.7B Q4_K_M,https://huggingface.co/TheBloke/phi-2-GGUF/resolve/main/phi-2.Q4_K_M.gguf
 3,Mistral v0.2 7B Q4_K_M,https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q4_K_M.gguf
 4,Falcon 7B instruct Q4_K_M,https://huggingface.co/maddes8cht/tiiuae-falcon-7b-instruct-gguf/resolve/main/tiiuae-falcon-7b-instruct-Q4_K_M.gguf
+5,Zephyr 7B Beta Q4_K_M,https://huggingface.co/TheBloke/zephyr-7B-beta-GGUF/resolve/main/zephyr-7b-beta.Q4_K_M.gguf
