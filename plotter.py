@@ -16,8 +16,10 @@ Maximum memory used: 5206 MB
 # For a given model, plot the prompt eval time and the eval time for each run.
 # The x-axis will be the run number, and the y-axis will be the time in ms.
 
-dir = "benchmarks/benchmarks-LP/benchmarks/"
-output_dir = "plots/LP/"
+dir = "benchmarks/"
+# dir = "benchmarks/benchmarks-LP/benchmarks/"
+output_dir = "plots/System plots/"
+# output_dir = "plots/LP/"
 
 # All the folders present in the benchmarks folder are the models
 models = os.listdir(dir)
@@ -49,23 +51,24 @@ for model in models:
         eval_times.append(eval_time)
         # Close the file
         f.close()
-    # Plot the prompt eval time
-    plt.plot(x, prompt_eval_times, label="Prompt eval time")
-    # Plot the eval time
-    plt.plot(x, eval_times, label="Eval time")
+    # Plot the prompt eval time on left y-axis and eval time on right y-axis
+    fig, ax1 = plt.subplots()
+    ax2 = ax1.twinx()
+    ax1.plot(x, prompt_eval_times, 'g-')
+    ax2.plot(x, eval_times, 'b-')
     # Set the title
     plt.title(model)
     # Set the x-axis label
-    plt.xlabel("Run")
+    ax1.set_xlabel('Run')
     # Set the y-axis label
-    plt.ylabel("Time (ms)")
-    # Set the legend
-    plt.legend()
+    ax1.set_ylabel('Prompt eval time (ms)', color='g')
+    ax2.set_ylabel('Eval time (ms)', color='b')
     # Save the plot
-    plt.savefig(output_dir + model + ".png")
+    plt.savefig(output_dir+model+".png")
     # Clear the plot
     plt.clf()
 
+    
 # stop here
 exit(0)
 #=======================================================================================================================
