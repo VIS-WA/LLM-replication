@@ -18,7 +18,7 @@ Maximum memory used: 5206 MB
 
 # dir = "benchmarks/"
 # # dir = "benchmarks/benchmarks-LP/benchmarks/"
-# output_dir = "plots/System plots/"
+# output_dir = "plots/System/"
 # # output_dir = "plots/LP/"
 
 # ## Timings
@@ -116,10 +116,10 @@ plt.clf()
 
 #=======================================================================================================================
 ## no of CPU vs time
-# model = "phi-2.Q4_K_M.gguf"
-model = "llama-2-7b.Q4_K_M.gguf"
-dir = "benchmarks/"+model+"/threads"
-output_dir = "plots/System plots/"
+model = "phi-2.Q4_K_M.gguf" # "phi-2.Q4_K_M.gguf" or "llama-2-7b.Q4_K_M.gguf"
+device = "System" # "System" or "LP"
+dir = "benchmarks/"+device+"/"+model+"/threads"
+output_dir = "plots/"+device+"/"
 
 # plot the eval time for each file which represents the number of CPU threads used starting with 1. The x-axis will be number of threads, and the y-axis will be the time in ms.
 # The folder structure is as follows:
@@ -145,9 +145,15 @@ for file in files:
     # Close the file
     f.close()
 # Plot the eval time
+    
 plt.plot(x, eval_times)
 # Set the title
-plt.title("Model: "+model)
+plt.title("Model: "+model+"\nDevice: "+device)
+# plot a dot at the number of threads for which the eval time is the least on the plot using argmin
+min_index = np.argmin(eval_times)
+min_threads = min_index + 1
+min_time = eval_times[min_index]
+plt.plot(min_threads, min_time, 'ro')
 # Set the x-axis label
 plt.xlabel("Number of threads")
 # Set the y-axis label

@@ -50,7 +50,7 @@ max_memory_used=$initial_free_memory
 while true; do
     free_memory=$(free -m | awk '/^Mem/ {printf "%d\n", $7}') # for linux
     # free_memory=$(( $(wmic OS get FreePhysicalMemory | grep -oP '\d+') / 1024 )) # for windows
-    # if free_memort is not fetched, do not update max_memory_used
+    # if free_memory is not fetched, do not update max_memory_used
     if [ -z "$free_memory" ]; then
         continue
     fi
