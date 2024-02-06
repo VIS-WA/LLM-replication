@@ -16,10 +16,11 @@ Maximum memory used: 5206 MB
 # For a given model, plot the prompt eval time and the eval time for each run.
 # The x-axis will be the run number, and the y-axis will be the time in ms.
 
-# dir = "benchmarks/"
-# # dir = "benchmarks/benchmarks-LP/benchmarks/"
-# output_dir = "plots/System/"
-# # output_dir = "plots/LP/"
+# model = "llama-2-7b.Q4_K_M.gguf" # "phi-2.Q4_K_M.gguf" or "llama-2-7b.Q4_K_M.gguf"
+# device = "OP" # "System" or "LP" or "OP"
+# dir = "benchmarks/"+device+"/"+model+"/threads"
+# output_dir = "plots/"+device+"/"
+
 
 # ## Timings
 # # All the folders present in the benchmarks folder are the models
@@ -65,7 +66,7 @@ Maximum memory used: 5206 MB
 #     ax1.set_ylabel('Prompt eval time (ms)', color='g')
 #     ax2.set_ylabel('Eval time (ms)', color='b')
 #     # Save the plot
-#     plt.savefig(output_dir+model+".png")
+#     plt.savefig(output_dir+"time-"+model+".png")
 #     # Clear the plot
 #     plt.clf()
 
@@ -74,50 +75,67 @@ Maximum memory used: 5206 MB
 '''
 #=======================================================================================================================
 ## Memory usage
-# plot the memory usage for each model across all runs
+# plot the memory usage for each model across all runs for a given device
+# The folder structure is as follows:
+#  - benchmarks/device/models_n/run_i.txt where model_n is the name of the model and run_i is the i-th run of the model.
 # The x-axis will be the run, and the y-axis will be the memory usage in MB and plot all the models in the same plot
+
+device = "System" # "System" or "LP" or "OP"
+dir = "benchmarks/"+device+"/"
+output_dir = "plots/"+device+"/"
+
+n_runs = 10
+# plot the memory usage for each model across all runs for a given device
+# All the folders present in the benchmarks folder are the models
+models = os.listdir(dir)
 # Create the x-axis
-x = np.arange(1, num_runs + 1)
+x = np.arange(1, n_runs + 1)
 # Create the y-axis
 for model in models:
-    # Create the y-axis
-    memory_usages = []
+    print("Plotting " + model)
     # Get the files in the folder
-    files = os.listdir(dir+"/" + model)
+    files = os.listdir(dir + model)
+    # Create the y-axis
+    memory_usage = []
     for file in files:
+        # if a folder is present, skip it
+        if os.path.isdir(dir + model + "/" + file):
+            continue
         # Open the file
-        f = open(dir+"/" + model + "/" + file, "r")
+        f = open(dir + model + "/" + file, "r")
         # Read the lines
         lines = f.readlines()
         # Get the memory usage
-        # print(lines[4].split()[3])
-        memory_usage = float(lines[4].split()[3])
-        # if memory_usage > 20000: 
+        # print(lines[3].split())
+        memory = float(lines[4].split()[3])
         # Append to the array
-        memory_usages.append(memory_usage)
+        memory_usage.append(memory)
         # Close the file
         f.close()
     # Plot the memory usage
-    plt.plot(x, memory_usages, label=model)
+    plt.plot(x, memory_usage, label=model)
 # Set the title
-plt.title("Memory usage")
+plt.title("Memory usage on " + device)
 # Set the x-axis label
-plt.xlabel("Run")
+plt.xlabel('Run')
 # Set the y-axis label
-plt.ylabel("Memory usage (MB)")
+plt.ylabel('Memory usage (MB)')
 # Set the legend
 plt.legend()
 # Save the plot
-plt.savefig(output_dir+"memory_usage.png")
+plt.savefig(output_dir+"memory-"+device+".png")
 # Clear the plot
 plt.clf()
+
+
+
 
 '''
 
 #=======================================================================================================================
 ## no of CPU vs time
-model = "phi-2.Q4_K_M.gguf" # "phi-2.Q4_K_M.gguf" or "llama-2-7b.Q4_K_M.gguf"
-device = "System" # "System" or "LP"
+model = "llama-2-7b.Q4_K_M.gguf" # "phi-2.Q4_K_M.gguf" or "llama-2-7b.Q4_K_M.gguf" or "mistral-7b-instruct-v0.2.Q4_K_M.gguf" or "tiiuae-falcon-7b-instruct-Q4_K_M.gguf"
+device = "LP" # "System" or "LP" or "OP"
 dir = "benchmarks/"+device+"/"+model+"/threads"
 output_dir = "plots/"+device+"/"
 
@@ -162,3 +180,5 @@ plt.ylabel("Eval time (ms)")
 plt.savefig(output_dir+"threads-"+model+".png")
 # Clear the plot
 plt.clf()
+
+# '''

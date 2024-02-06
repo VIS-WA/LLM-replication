@@ -7,7 +7,7 @@ This repo contains the scripts to run the LLM model on a device. Currently this 
 2. `model.sh`: Script to download an LLM model's weights. List of available models [here](models_list.csv).
 3. `setup.sh`: Script to install [`llama.cpp`](https://github.com/ggerganov/llama.cpp). This is used to run the above downloaded models.
 4. `run.sh`: Script to run the LLM model on a device and log the benchmarks. This script can be executed after completing the setup steps mentioned above.
-
+5. `t_run.sh`: Script to benchmark the time taken to execute a selected model with a variable number of processor threads (from 1 to the maximum number of threads) and store the results in a file.
 
 
 ## Execution Steps:

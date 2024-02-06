@@ -1,12 +1,10 @@
 models/
 llama.cpp/
 main.log
-benchmarks.txt
 max_memory_used.txt
 plots/
 memory_used.txt
 plotter.py
 benchmark*
 temp*
-
 
