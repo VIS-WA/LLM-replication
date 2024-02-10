@@ -84,7 +84,7 @@ device = "System" # "System" or "LP" or "OP"
 dir = "benchmarks/"+device+"/"
 output_dir = "plots/"+device+"/"
 
-n_runs = 10
+n_runs = 5
 # plot the memory usage for each model across all runs for a given device
 # All the folders present in the benchmarks folder are the models
 models = os.listdir(dir)
@@ -123,14 +123,12 @@ plt.ylabel('Memory usage (MB)')
 # Set the legend
 plt.legend()
 # Save the plot
-plt.savefig(output_dir+"memory-"+device+".png")
+plt.savefig(output_dir+"memory-"+device+".pdf")
 # Clear the plot
 plt.clf()
 
 
 
-
-'''
 
 #=======================================================================================================================
 ## no of CPU vs time
@@ -181,4 +179,66 @@ plt.savefig(output_dir+"threads-"+model+".png")
 # Clear the plot
 plt.clf()
 
-# '''
+'''
+
+#=======================================================================================================================
+
+## prompt size vs memory usage and eval time
+model = "phi-2.Q4_K_M.gguf" # "phi-2.Q4_K_M.gguf" or "llama-2-7b.Q4_K_M.gguf" or "mistral-7b-instruct-v0.2.Q4_K_M.gguf" or "tiiuae-falcon-7b-instruct-Q4_K_M.gguf"
+device = "System" # "System" or "LP" or "OP"
+dir = "benchmarks/"+device+"/"+model+"/prompts"
+output_dir = "plots/"+device+"/"
+
+# plot the memory usage and eval time for each file which represents the prompt size. The x-axis will be the prompt size, and the y-axis will be the memory usage in MB and eval time in ms.
+# The folder structure is as follows:
+#  - benchmarks/phi-2.Q4_K_M.gguf/prompts/i.txt.  The length of ith line of prompt.txt in the parent directory is the prompt size for the ith file in the prompts folder.
+# Get the files in the folder
+files = os.listdir(dir)
+# Get the prompt sizes from the prompt.txt file
+f = open("prompt.txt", "r")
+# Read the lines
+lines = f.readlines()
+# Get the prompt sizes
+prompt_sizes = []
+for line in lines:
+    prompt_sizes.append(len(line))
+# Close the file
+f.close()
+# Create the x-axis
+x = np.array(prompt_sizes)
+# Create the y-axis
+memory_usage = []
+eval_times = []
+for file in files:
+    # Open the file
+    f = open(dir + "/" + file, "r")
+    # Read the lines
+    lines = f.readlines()
+    # Get the memory usage
+    # print(lines[3].split())
+    memory = float(lines[4].split()[3])
+    # Get the eval time
+    # print(lines[2].split())
+    eval_time = float(lines[2].split()[3])
+    # Append to the array
+    memory_usage.append(memory)
+    eval_times.append(eval_time)
+    # Close the file
+    f.close()
+# Plot the memory usage
+fig, ax1 = plt.subplots()
+ax2 = ax1.twinx()
+ax1.plot(x, memory_usage, 'g-')
+ax2.plot(x, eval_times, 'b-')
+# Set the title
+plt.title("Model: "+model+"\nDevice: "+device)
+# Set the x-axis label
+ax1.set_xlabel('Prompt size (characters)')
+# Set the y-axis label
+ax1.set_ylabel('Memory usage (MB)', color='g')
+ax2.set_ylabel('Eval time (ms)', color='b')
+# Save the plot
+plt.savefig(output_dir+"prompt-"+model+".png")
+# Clear the plot
+plt.clf()
+
