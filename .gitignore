@@ -1,11 +1,11 @@
 models/
 llama.cpp/
-main.log
-max_memory_used.txt
+scripts/main.log
+scripts/max_memory.txt
 plots/
 memory_used.txt
 plotter.py
 benchmark*
 temp*
 Merged_Gesture_Data.csv
-
+old_scripts/
