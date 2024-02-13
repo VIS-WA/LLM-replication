@@ -65,7 +65,7 @@ for model_name in $(ls $model_dir); do
         #===================================================================================================
         # refine the log file to extract the timings
         echo "Refining the log file to extract the timings"
-        results_file="benchmarks/$model_name/run_$it.txt"
+        results_file="../benchmarks/$DEVICE/$model_name/runs/$it.txt"
         ./extract.sh $model_name $results_file
         echo "Timings extracted and benchmarks file updated in Benchmarks folder."
 

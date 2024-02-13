@@ -18,7 +18,7 @@ Maximum memory used: 5206 MB
 
 # model = "llama-2-7b.Q4_K_M.gguf" # "phi-2.Q4_K_M.gguf" or "llama-2-7b.Q4_K_M.gguf"
 # device = "OP" # "System" or "LP" or "OP"
-# dir = "benchmarks/"+device+"/"+model+"/threads"
+# dir = "benchmarks/"+device+"/"+model+"/runs"
 # output_dir = "plots/"+device+"/"
 
 
@@ -75,7 +75,7 @@ Maximum memory used: 5206 MB
 '''
 #=======================================================================================================================
 ## Memory usage
-# plot the memory usage for each model across all runs for a given device
+# plot the memory usage for all models across all runs for a given device
 # The folder structure is as follows:
 #  - benchmarks/device/models_n/run_i.txt where model_n is the name of the model and run_i is the i-th run of the model.
 # The x-axis will be the run, and the y-axis will be the memory usage in MB and plot all the models in the same plot

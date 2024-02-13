@@ -51,7 +51,7 @@ for num_threads in $(seq 1 $(nproc --all)); do
     echo "Maximum memory used: $max_memory_used MB"
 
     #===================================================================================================
-    results_file="benchmarks/$model_name/threads/$num_threads.txt"
+    results_file="../benchmarks/$DEVICE/$model_name/threads/$num_threads.txt"
     # refine the log file to extract the timings
     echo "Refining the log file to extract the timings"
     ./extract.sh $model_name $results_file

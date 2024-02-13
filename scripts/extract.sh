@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Path: scripts/extract.sh
+# Purpose: Extract the timings from the log file and save them to a file specified by the parent script
+
+
 # recieve the model name from the parent script
 model_name=$1
 results_file=$2

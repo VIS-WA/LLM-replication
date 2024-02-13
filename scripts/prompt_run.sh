@@ -79,7 +79,7 @@ for prompt in "${prompts[@]}"; do
 
     #===================================================================================================
     # refine the log file to extract the timings
-    results_file="benchmarks/$model_name/prompts/$x.txt"
+    results_file="../benchmarks/$DEVICE/$model_name/prompts/$x.txt"
     echo "Refining the log file to extract the timings"
     ./extract.sh $model_name $results_file
     echo "Timings extracted and benchmarks file updated in Benchmarks folder."

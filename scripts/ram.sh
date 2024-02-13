@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Path: scripts/ram.sh
+# Purpose: Monitor the memory usage of the parent process and its child processes
+
 # Set the path to the max_memory.txt file
 max_memory_file="max_memory.txt"
 
